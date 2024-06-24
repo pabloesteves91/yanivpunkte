@@ -15,6 +15,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     document.getElementById('goToPage3Button').addEventListener('click', goToPage3);
     document.getElementById('addScoreButton').addEventListener('click', addScore);
+    document.querySelectorAll('#homeButton').forEach(button => {
+        button.addEventListener('click', goToPage1);
+    });
 });
 
 function addPlayer() {
@@ -39,6 +42,13 @@ function updatePlayerList() {
         li.textContent = name;
         playerList.appendChild(li);
     });
+}
+
+function goToPage1() {
+    document.getElementById('page1').classList.remove('hidden');
+    document.getElementById('page2').classList.add('hidden');
+    document.getElementById('page3').classList.add('hidden');
+    document.getElementById('page4').classList.add('hidden');
 }
 
 function goToPage2() {
@@ -113,25 +123,29 @@ function addScore() {
 
     playerScores[selectedPlayer] += totalScore;
 
-    if (yanivPoints === 100) {
-        if (playerScores[selectedPlayer] === 75) {
-            playerScores[selectedPlayer] = 35;
-        } else if (playerScores[selectedPlayer] === 100) {
-            playerScores[selectedPlayer] = 50;
-        }
-    } else if (yanivPoints === 200) {
-        if (playerScores[selectedPlayer] === 150) {
-            playerScores[selectedPlayer] = 75;
-        } else if (playerScores[selectedPlayer] === 200) {
-            playerScores[selectedPlayer] = 100;
-        }
-    }
+    adjustScores(selectedPlayer);
 
     updateScoreList();
     scoreInput.value = '';
     assafCheckbox.checked = false;
 
     checkForLoser();
+}
+
+function adjustScores(player) {
+    if (yanivPoints === 100) {
+        if (playerScores[player] === 75) {
+            playerScores[player] = 35;
+        } else if (playerScores[player] === 100) {
+            playerScores[player] = 50;
+        }
+    } else if (yanivPoints === 200) {
+        if (playerScores[player] === 150) {
+            playerScores[player] = 75;
+        } else if (playerScores[player] === 200) {
+            playerScores[player] = 100;
+        }
+    }
 }
 
 function updateScoreList() {
