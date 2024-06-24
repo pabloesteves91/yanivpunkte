@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yaniv Punkte App</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+        h2 {
+            color: #333333;
+        }
+        input[type="text"], input[type="number"], .selection-buttons {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #dddddd;
+            border-radius: 4px;
+        }
+        button {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 10px;
+            border-bottom: 1px solid #dddddd;
+        }
+        .hidden {
+            display: none;
+        }
+        .rules {
+            background-color: #fafafa;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #4CAF50;
+        }
+        .player-buttons button {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 5px 0;
+        }
+        .selection-buttons button {
+            width: 48%;
+            margin: 5px 1%;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="page1">
+            <h1>YANIV</h1>
+            <h2>Spielernamen eintragen (max. 6 Spieler)</h2>
+            <input type="text" id="playerNameInput" placeholder="Spielername">
+            <button onclick="addPlayer()">Spieler hinzufügen</button>
+            <ul id="playerList"></ul>
+            <button onclick="goToPage2()">Weiter</button>
+            <div class="rules">
+                <h3>Spielregeln:</h3>
+                <p>1. Jeder Spieler beginnt mit 0 Punkten.</p>
+                <p>2. Die Runde endet, wenn ein Spieler Yaniv ruft und die Summe seiner Karten ≤ 7 ist.</p>
+                <p>3. Alle anderen Spieler machen noch einen letzten Zug und die Runde ist zu Ende.</p>
+                <p>4. Spieler können durch Assaf Strafpunkte erhalten, wenn ein anderer Spieler weniger oder gleichviel Punkte hat wie der Spieler der Yaniv hat.</p>
+                <p>5. Die Punktzahl eines Spielers wird auf 35 zurückgesetzt, wenn er 75 erreicht hat. (Von 150 auf 75 bei Yaniv 200)</p>
+                <p>6. Bei genau 100 Punkten wird die Punktzahl auf 50 zurückgesetzt. (Von 200 auf 100 bei Yaniv 200)</p>
+                <p>7. Ein Spieler verliert, wenn seine Punktzahl höher als die eingestellten Yaniv-Punkte ist.</p>
+            </div>
+        </div>
+
+        <div id="page2" class="hidden">
+            <h1>YANIV</h1>
+            <h2>Yaniv und Assaf Punkte eintragen</h2>
+            <div class="selection-buttons">
+                <button onclick="setYanivPoints(100)">Yaniv 100</button>
+                <button onclick="setYanivPoints(200)">Yaniv 200</button>
+            </div>
+            <div class="selection-buttons">
+                <button onclick="setAssafPoints(30)">Assaf 30</button>
+                <button onclick="setAssafPoints(50)">Assaf 50</button>
+            </div>
+            <button onclick="goToPage3()">Weiter</button>
+        </div>
+
+        <div id="page3" class="hidden">
+            <h1>YANIV</h1>
+            <h2>Punkte eintragen und Assaf auswählen</h2>
+            <div class="player-buttons" id="playerButtons"></div>
+            <input type="number" id="scoreInput" placeholder="Punkte">
+            <input type="checkbox" id="assafCheckbox"> Assaf
+            <button onclick="addScore()">Punkte hinzufügen</button>
+            <ul id="scoreList"></ul>
+        </div>
+
+        <div id="page4" class="hidden">
+            <h1>YANIV</h1>
+            <h2>Spielergebnis</h2>
+            <p id="result"></p>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
