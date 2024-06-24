@@ -95,4 +95,62 @@ function addScore() {
 
     let totalScore = score;
     if (assafCheckbox.checked) {
-        totalScore +=
+        totalScore += assafPoints;
+    }
+
+    playerScores[selectedPlayer] += totalScore;
+
+    if (yanivPoints === 100) {
+        if (playerScores[selectedPlayer] === 75) {
+            playerScores[selectedPlayer] = 35;
+        } else if (playerScores[selectedPlayer] === 100) {
+            playerScores[selectedPlayer] = 50;
+        }
+    } else if (yanivPoints === 200) {
+        if (playerScores[selectedPlayer] === 150) {
+            playerScores[selectedPlayer] = 75;
+        } else if (playerScores[selectedPlayer] === 200) {
+            playerScores[selectedPlayer] = 100;
+        }
+    }
+
+    updateScoreList();
+    scoreInput.value = '';
+    assafCheckbox.checked = false;
+
+    checkForLoser();
+}
+
+function updateScoreList() {
+    const scoreList = document.getElementById('scoreList');
+    scoreList.innerHTML = '';
+    for (const [name, score] of Object.entries(playerScores)) {
+        const li = document.createElement('li');
+        li.textContent = `${name}: ${score}`;
+        scoreList.appendChild(li);
+    }
+}
+
+function checkForLoser() {
+    let loser = null;
+    let minScore = Infinity;
+    let winner = null;
+
+    for (const [name, score] of Object.entries(playerScores)) {
+        if (score > yanivPoints) {
+            loser = name;
+        }
+        if (score < minScore) {
+            minScore = score;
+            winner = name;
+        }
+    }
+
+    if (loser) {
+        document.getElementById('page3').classList.add('hidden');
+        document.getElementById('page4').classList.remove('hidden');
+
+        const result = document.getElementById('result');
+        result.innerHTML = `${loser} hat verloren!<br>Gewinner: ❤️ ${winner} ❤️`;
+    }
+}
