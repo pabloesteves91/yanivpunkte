@@ -4,6 +4,19 @@ let yanivPoints = 0;
 let assafPoints = 0;
 let selectedPlayer = null;
 
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById('addPlayerButton').addEventListener('click', addPlayer);
+    document.getElementById('goToPage2Button').addEventListener('click', goToPage2);
+    document.querySelectorAll('.yanivButton').forEach(button => {
+        button.addEventListener('click', () => setYanivPoints(button.dataset.points));
+    });
+    document.querySelectorAll('.assafButton').forEach(button => {
+        button.addEventListener('click', () => setAssafPoints(button.dataset.points));
+    });
+    document.getElementById('goToPage3Button').addEventListener('click', goToPage3);
+    document.getElementById('addScoreButton').addEventListener('click', addScore);
+});
+
 function addPlayer() {
     const playerNameInput = document.getElementById('playerNameInput');
     const playerName = playerNameInput.value.trim();
@@ -38,12 +51,12 @@ function goToPage2() {
 }
 
 function setYanivPoints(points) {
-    yanivPoints = points;
+    yanivPoints = parseInt(points);
     alert(`Yaniv Punkte auf ${points} gesetzt`);
 }
 
 function setAssafPoints(points) {
-    assafPoints = points;
+    assafPoints = parseInt(points);
     alert(`Assaf Punkte auf ${points} gesetzt`);
 }
 
@@ -63,7 +76,7 @@ function updatePlayerButtons() {
     playerNames.forEach(name => {
         const button = document.createElement('button');
         button.textContent = name;
-        button.onclick = () => selectPlayer(name);
+        button.addEventListener('click', () => selectPlayer(name));
         playerButtons.appendChild(button);
     });
 }
