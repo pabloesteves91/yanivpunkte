@@ -22,6 +22,7 @@
         h1 {
             text-align: center;
             color: #4CAF50;
+            cursor: pointer;
         }
         h2 {
             color: #333333;
@@ -79,7 +80,7 @@
 <body>
     <div class="container">
         <div id="page1">
-            <h1>YANIV</h1>
+            <h1 id="homeButton">YANIV</h1>
             <h2>Spielernamen eintragen (max. 6 Spieler)</h2>
             <input type="text" id="playerNameInput" placeholder="Spielername">
             <button id="addPlayerButton">Spieler hinzufügen</button>
@@ -98,7 +99,7 @@
         </div>
 
         <div id="page2" class="hidden">
-            <h1>YANIV</h1>
+            <h1 id="homeButton">YANIV</h1>
             <h2>Yaniv und Assaf Punkte eintragen</h2>
             <div class="selection-buttons">
                 <button class="yanivButton" data-points="100">Yaniv 100</button>
@@ -112,7 +113,7 @@
         </div>
 
         <div id="page3" class="hidden">
-            <h1>YANIV</h1>
+            <h1 id="homeButton">YANIV</h1>
             <h2>Punkte eintragen und Assaf auswählen</h2>
             <div class="player-buttons" id="playerButtons"></div>
             <input type="number" id="scoreInput" placeholder="Punkte">
@@ -122,7 +123,7 @@
         </div>
 
         <div id="page4" class="hidden">
-            <h1>YANIV</h1>
+            <h1 id="homeButton">YANIV</h1>
             <h2>Spielergebnis</h2>
             <p id="result"></p>
         </div>
