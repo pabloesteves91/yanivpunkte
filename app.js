@@ -95,16 +95,4 @@ function addScore() {
 
     let totalScore = score;
     if (assafCheckbox.checked) {
-        totalScore += assafPoints;
-    }
-
-    playerScores[selectedPlayer] += totalScore;
-
-    if (yanivPoints === 100) {
-        if (playerScores[selectedPlayer] === 75) {
-            playerScores[selectedPlayer] = 35;
-        } else if (playerScores[selectedPlayer] === 100) {
-            playerScores[selectedPlayer] = 50;
-        }
-    } else if (yanivPoints === 200) {
-        if (playerScores
+        totalScore +=
