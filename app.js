@@ -108,4 +108,4 @@ function addScore() {
         }
     } else if (yanivPoints === 200) {
         if (playerScores[selectedPlayer] === 150) {
-            playerScores[selectedPlayer]
+           
