@@ -82,9 +82,9 @@
             <h1>YANIV</h1>
             <h2>Spielernamen eintragen (max. 6 Spieler)</h2>
             <input type="text" id="playerNameInput" placeholder="Spielername">
-            <button onclick="addPlayer()">Spieler hinzufügen</button>
+            <button id="addPlayerButton">Spieler hinzufügen</button>
             <ul id="playerList"></ul>
-            <button onclick="goToPage2()">Weiter</button>
+            <button id="goToPage2Button">Weiter</button>
             <div class="rules">
                 <h3>Spielregeln:</h3>
                 <p>1. Jeder Spieler beginnt mit 0 Punkten.</p>
@@ -101,14 +101,14 @@
             <h1>YANIV</h1>
             <h2>Yaniv und Assaf Punkte eintragen</h2>
             <div class="selection-buttons">
-                <button onclick="setYanivPoints(100)">Yaniv 100</button>
-                <button onclick="setYanivPoints(200)">Yaniv 200</button>
+                <button class="yanivButton" data-points="100">Yaniv 100</button>
+                <button class="yanivButton" data-points="200">Yaniv 200</button>
             </div>
             <div class="selection-buttons">
-                <button onclick="setAssafPoints(30)">Assaf 30</button>
-                <button onclick="setAssafPoints(50)">Assaf 50</button>
+                <button class="assafButton" data-points="30">Assaf 30</button>
+                <button class="assafButton" data-points="50">Assaf 50</button>
             </div>
-            <button onclick="goToPage3()">Weiter</button>
+            <button id="goToPage3Button">Weiter</button>
         </div>
 
         <div id="page3" class="hidden">
@@ -117,7 +117,7 @@
             <div class="player-buttons" id="playerButtons"></div>
             <input type="number" id="scoreInput" placeholder="Punkte">
             <input type="checkbox" id="assafCheckbox"> Assaf
-            <button onclick="addScore()">Punkte hinzufügen</button>
+            <button id="addScoreButton">Punkte hinzufügen</button>
             <ul id="scoreList"></ul>
         </div>
 
