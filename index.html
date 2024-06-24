@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yaniv Punkte App</title>
+    <title data-key="appTitle">Yaniv Points App</title>
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-180x180.png">
     <link rel="apple-touch-icon" sizes="152x152" href="apple-touch-icon-152x152.png">
@@ -27,6 +27,20 @@
         h1 {
             text-align: center;
             color: #4CAF50;
+            cursor: pointer;
+        }
+        .language-buttons {
+            text-align: right;
+            margin-top: -30px;
+            margin-bottom: 10px;
+        }
+        .language-buttons button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            margin: 0 5px;
             cursor: pointer;
         }
         h2 {
@@ -86,26 +100,34 @@
     <div class="container">
         <div id="page1">
             <h1 id="homeButton">YANIV</h1>
-            <h2>Spielernamen eintragen (max. 6 Spieler)</h2>
-            <input type="text" id="playerNameInput" placeholder="Spielername">
-            <button id="addPlayerButton">Spieler hinzufügen</button>
+            <div class="language-buttons">
+                <button onclick="setLanguage('en')">EN</button>
+                <button onclick="setLanguage('de')">DE</button>
+            </div>
+            <h2 data-key="playerNames">Enter Player Names (max 6 players)</h2>
+            <input type="text" id="playerNameInput" placeholder="Player Name" data-placeholder-key="playerNameInput">
+            <button id="addPlayerButton" data-key="addPlayer">Add Player</button>
             <ul id="playerList"></ul>
-            <button id="goToPage2Button">Weiter</button>
+            <button id="goToPage2Button" data-key="next">Next</button>
             <div class="rules">
-                <h3>Spielregeln:</h3>
-                <p>1. Jeder Spieler beginnt mit 0 Punkten.</p>
-                <p>2. Die Runde endet, wenn ein Spieler Yaniv ruft und die Summe seiner Karten ≤ 7 ist.</p>
-                <p>3. Alle anderen Spieler machen noch einen letzten Zug und die Runde ist zu Ende.</p>
-                <p>4. Spieler können durch Assaf Strafpunkte erhalten, wenn ein anderer Spieler weniger oder gleichviel Punkte hat wie der Spieler der Yaniv hat.</p>
-                <p>5. Die Punktzahl eines Spielers wird auf 35 zurückgesetzt, wenn er 75 erreicht hat. (Von 150 auf 75 bei Yaniv 200)</p>
-                <p>6. Bei genau 100 Punkten wird die Punktzahl auf 50 zurückgesetzt. (Von 200 auf 100 bei Yaniv 200)</p>
-                <p>7. Ein Spieler verliert, wenn seine Punktzahl höher als die eingestellten Yaniv-Punkte ist.</p>
+                <h3 data-key="rulesTitle">Game Rules:</h3>
+                <p data-key="rule1">1. Each player starts with 0 points.</p>
+                <p data-key="rule2">2. The round ends when a player calls Yaniv and the sum of their cards is ≤ 7.</p>
+                <p data-key="rule3">3. All other players take one last turn and the round ends.</p>
+                <p data-key="rule4">4. Players can receive Assaf penalty points if another player has the same or fewer points than the player who called Yaniv.</p>
+                <p data-key="rule5">5. A player's score resets to 35 if they reach 75 points. (Resets to 75 if they reach 150 in Yaniv 200 mode)</p>
+                <p data-key="rule6">6. A player's score resets to 50 if they reach exactly 100 points. (Resets to 100 if they reach 200 in Yaniv 200 mode)</p>
+                <p data-key="rule7">7. A player loses if their score exceeds the set Yaniv points.</p>
             </div>
         </div>
 
         <div id="page2" class="hidden">
             <h1 id="homeButton">YANIV</h1>
-            <h2>Yaniv und Assaf Punkte eintragen</h2>
+            <div class="language-buttons">
+                <button onclick="setLanguage('en')">EN</button>
+                <button onclick="setLanguage('de')">DE</button>
+            </div>
+            <h2 data-key="yanivPoints">Enter Yaniv and Assaf Points</h2>
             <div class="selection-buttons">
                 <button class="yanivButton" data-points="100">Yaniv 100</button>
                 <button class="yanivButton" data-points="200">Yaniv 200</button>
@@ -114,24 +136,32 @@
                 <button class="assafButton" data-points="30">Assaf 30</button>
                 <button class="assafButton" data-points="50">Assaf 50</button>
             </div>
-            <button id="goToPage3Button">Weiter</button>
+            <button id="goToPage3Button" data-key="next">Next</button>
         </div>
 
         <div id="page3" class="hidden">
             <h1 id="homeButton">YANIV</h1>
-            <h2>Punkte eintragen und Assaf auswählen</h2>
+            <div class="language-buttons">
+                <button onclick="setLanguage('en')">EN</button>
+                <button onclick="setLanguage('de')">DE</button>
+            </div>
+            <h2 data-key="enterPoints">Enter Points and Select Assaf</h2>
             <div class="player-buttons" id="playerButtons"></div>
-            <input type="number" id="scoreInput" placeholder="Punkte">
-            <input type="checkbox" id="assafCheckbox"> Assaf
-            <button id="addScoreButton">Punkte hinzufügen</button>
+            <input type="number" id="scoreInput" placeholder="Points" data-placeholder-key="scoreInput">
+            <input type="checkbox" id="assafCheckbox"> <span data-key="assaf">Assaf</span>
+            <button id="addScoreButton" data-key="addPoints">Add Points</button>
             <ul id="scoreList"></ul>
         </div>
 
         <div id="page4" class="hidden">
             <h1 id="homeButton">YANIV</h1>
-            <h2>Spielergebnis</h2>
+            <div class="language-buttons">
+                <button onclick="setLanguage('en')">EN</button>
+                <button onclick="setLanguage('de')">DE</button>
+            </div>
+            <h2 data-key="results">Game Results</h2>
             <p id="result"></p>
-            <button id="newGameButton">Neues Spiel</button>
+            <button id="newGameButton" data-key="newGame">New Game</button>
         </div>
     </div>
     <script src="app.js"></script>
