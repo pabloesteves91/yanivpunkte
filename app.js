@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('#homeButton').forEach(button => {
         button.addEventListener('click', goToPage1);
     });
+    document.getElementById('newGameButton').addEventListener('click', startNewGame);
 });
 
 function addPlayer() {
@@ -180,4 +181,15 @@ function checkForLoser() {
         const result = document.getElementById('result');
         result.innerHTML = `${loser} hat verloren!<br>Gewinner: ❤️ ${winner} ❤️`;
     }
+}
+
+function startNewGame() {
+    playerNames = [];
+    playerScores = {};
+    yanivPoints = 0;
+    assafPoints = 0;
+    selectedPlayer = null;
+    updatePlayerList();
+    document.getElementById('scoreList').innerHTML = '';
+    goToPage1();
 }
