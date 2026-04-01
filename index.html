@@ -1,171 +1,988 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yaniv Punkte App</title>
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-180x180.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="apple-touch-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="apple-touch-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="apple-touch-icon-120x120.png">
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            text-align: center;
-            color: #4CAF50;
-            cursor: pointer;
-        }
-        h2 {
-            color: #333333;
-        }
-        input[type="text"], input[type="number"], .selection-buttons {
-            width: calc(100% - 20px);
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #dddddd;
-            border-radius: 4px;
-        }
-        button {
-            width: calc(100% - 20px);
-            padding: 10px;
-            margin: 10px 0;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            padding: 10px;
-            border-bottom: 1px solid #dddddd;
-        }
-        .hidden {
-            display: none;
-        }
-        .rules {
-            background-color: #fafafa;
-            padding: 15px;
-            margin: 15px 0;
-            border-left: 4px solid #4CAF50;
-        }
-        .player-buttons button {
-            width: calc(100% - 20px);
-            padding: 10px;
-            margin: 5px 0;
-        }
-        .selection-buttons button {
-            width: 48%;
-            margin: 5px 1%;
-            display: inline-block;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0d1f17">
+  <title>Yaniv Punkte</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-180x180.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="apple-touch-icon-120x120.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================================
+       1. CSS CUSTOM PROPERTIES
+    ============================================================ */
+    :root {
+      --bg:           #0d1f17;
+      --bg-card:      #142a1e;
+      --bg-surface:   #1c3829;
+      --bg-surface-2: #243f30;
+
+      --gold:         #d4a843;
+      --gold-light:   #e8c060;
+      --gold-dim:     rgba(212, 168, 67, 0.14);
+      --gold-glow:    rgba(212, 168, 67, 0.28);
+
+      --green:        #3dbe6e;
+      --green-dim:    rgba(61, 190, 110, 0.14);
+
+      --danger:       #e05252;
+      --danger-dim:   rgba(224, 82, 82, 0.14);
+      --warning:      #e0953a;
+      --warning-dim:  rgba(224, 149, 58, 0.14);
+
+      --text:         #f0ead6;
+      --text-2:       #b5c9bc;
+      --text-muted:   #7a9a87;
+
+      --border:       #243f30;
+      --border-2:     #2f5040;
+
+      --radius:       14px;
+      --radius-sm:    8px;
+      --radius-full:  999px;
+
+      --shadow:       0 4px 24px rgba(0,0,0,0.45);
+      --shadow-gold:  0 0 16px rgba(212,168,67,0.25);
+    }
+
+    /* ============================================================
+       2. RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { height: 100%; }
+
+    body {
+      height: 100%;
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+      overflow: hidden;
+    }
+
+    /* ============================================================
+       3. APP SHELL & PAGE SYSTEM
+    ============================================================ */
+    .app {
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      height: 100dvh;
+      height: 100vh;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+
+    .page {
+      position: absolute;
+      inset: 0;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+      background: var(--bg);
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: opacity 0.28s ease, transform 0.28s ease;
+    }
+
+    .page.active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .page-inner {
+      padding: 0 20px calc(40px + env(safe-area-inset-bottom, 0px));
+    }
+
+    /* ============================================================
+       4. HEADER
+    ============================================================ */
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px 12px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 10;
+    }
+
+    .logo {
+      font-family: 'Cinzel', Georgia, serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 3px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .logo .r { color: #e05252; }
+    .logo .b { color: var(--text); }
+
+    .logo-hero {
+      text-align: center;
+      padding: 36px 20px 8px;
+    }
+
+    .logo-hero .logo {
+      font-size: 38px;
+      letter-spacing: 5px;
+      display: block;
+      text-shadow: var(--shadow-gold);
+    }
+
+    .logo-hero .subtitle {
+      font-size: 12px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    /* ============================================================
+       5. TYPOGRAPHY
+    ============================================================ */
+    h2 {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text);
+      margin: 24px 0 10px;
+    }
+
+    h3 {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin: 20px 0 8px;
+    }
+
+    /* ============================================================
+       6. BUTTONS
+    ============================================================ */
+    .btn-primary {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      background: var(--gold);
+      color: #0d1f17;
+      border: none;
+      border-radius: var(--radius);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      margin-top: 16px;
+      transition: background 0.18s, opacity 0.18s, transform 0.1s;
+    }
+
+    .btn-primary:hover { background: var(--gold-light); }
+    .btn-primary:active { transform: scale(0.98); }
+    .btn-primary:disabled { opacity: 0.35; cursor: not-allowed; }
+
+    .btn-back {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 22px;
+      line-height: 1;
+      cursor: pointer;
+      padding: 2px 6px 2px 0;
+      transition: color 0.15s;
+    }
+    .btn-back:hover { color: var(--text); }
+
+    .btn-add {
+      width: 44px;
+      height: 44px;
+      flex-shrink: 0;
+      background: var(--green);
+      color: #0d1f17;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 24px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .btn-add:hover { background: #4ed07a; }
+    .btn-add:active { transform: scale(0.93); }
+
+    /* Option selector cards (Page 2) */
+    .option-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .btn-option {
+      padding: 20px 12px;
+      background: var(--bg-card);
+      color: var(--text-muted);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      font-family: 'Cinzel', serif;
+      font-size: 26px;
+      font-weight: 700;
+      cursor: pointer;
+      position: relative;
+      transition: border-color 0.2s, background 0.2s, color 0.2s;
+    }
+
+    .btn-option:hover {
+      border-color: var(--border-2);
+      color: var(--text-2);
+    }
+
+    .btn-option.selected {
+      border-color: var(--gold);
+      background: var(--gold-dim);
+      color: var(--gold);
+      box-shadow: var(--shadow-gold);
+    }
+
+    .btn-option .check {
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      font-size: 11px;
+      font-family: 'Inter', sans-serif;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .btn-option.selected .check { opacity: 1; }
+
+    /* Score stepper buttons */
+    .btn-step {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+      background: var(--bg-surface);
+      color: var(--text-2);
+      border: 1.5px solid var(--border-2);
+      border-radius: var(--radius-sm);
+      font-size: 22px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s, color 0.15s;
+      user-select: none;
+    }
+    .btn-step:hover { background: var(--bg-surface-2); color: var(--text); }
+    .btn-step:active { transform: scale(0.93); }
+
+    /* ============================================================
+       7. INPUTS
+    ============================================================ */
+    .input-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .input-field {
+      flex: 1;
+      padding: 12px 14px;
+      background: var(--bg-surface);
+      color: var(--text);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      outline: none;
+      -webkit-appearance: none;
+      transition: border-color 0.18s;
+    }
+    .input-field::placeholder { color: var(--text-muted); }
+    .input-field:focus { border-color: var(--green); }
+    .input-field.has-error { border-color: var(--danger); }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+    .score-stepper {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .score-stepper .input-field {
+      flex: 1;
+      text-align: center;
+      font-size: 20px;
+      font-family: 'Cinzel', serif;
+      font-weight: 600;
+    }
+
+    /* ============================================================
+       8. VALIDATION MESSAGES
+    ============================================================ */
+    .v-error {
+      font-size: 13px;
+      color: var(--danger);
+      margin-top: 6px;
+      display: none;
+    }
+
+    .settings-status {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-align: center;
+      min-height: 18px;
+      margin-top: 10px;
+      transition: color 0.2s;
+    }
+
+    /* ============================================================
+       9. PLAYER CHIPS
+    ============================================================ */
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 12px 0 4px;
+    }
+
+    .chips.scrollable {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .chips.scrollable::-webkit-scrollbar { display: none; }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 12px;
+      background: var(--bg-surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-full);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: border-color 0.18s, background 0.18s, color 0.18s;
+      animation: chipIn 0.22s ease both;
+    }
+
+    .chip:hover { border-color: var(--border-2); }
+
+    .chip.selected {
+      background: var(--green-dim);
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    .chip-avatar {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0d1f17;
+      flex-shrink: 0;
+    }
+
+    .chip-rm {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--border-2);
+      font-size: 10px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s, color 0.15s;
+      flex-shrink: 0;
+    }
+    .chip-rm:hover { background: var(--danger); color: #fff; }
+
+    /* ============================================================
+       10. SCORE CARDS (Page 3 Leaderboard)
+    ============================================================ */
+    .score-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 8px 0 16px;
+    }
+
+    .score-card {
+      background: var(--bg-card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 14px 10px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, background 0.3s;
+    }
+
+    .score-card.leading {
+      border-color: var(--gold);
+      background: linear-gradient(135deg, var(--bg-card), rgba(212,168,67,0.07));
+    }
+
+    .score-card.warning {
+      border-color: var(--warning);
+      background: linear-gradient(135deg, var(--bg-card), rgba(224,149,58,0.07));
+    }
+
+    .score-card.danger {
+      border-color: var(--danger);
+      background: linear-gradient(135deg, var(--bg-card), rgba(224,82,82,0.07));
+    }
+
+    .sc-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 9px;
+    }
+
+    .sc-name {
+      font-size: 15px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sc-rank {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .score-card.leading .sc-rank { color: var(--gold); }
+
+    .sc-score {
+      font-family: 'Cinzel', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      transition: color 0.3s;
+    }
+
+    .score-card.leading .sc-score { color: var(--gold); }
+    .score-card.warning .sc-score { color: var(--warning); }
+    .score-card.danger  .sc-score { color: var(--danger); }
+
+    .prog-bar {
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .prog-fill {
+      height: 100%;
+      border-radius: 2px;
+      background: var(--green);
+      transition: width 0.45s ease;
+    }
+
+    .score-card.leading  .prog-fill { background: var(--gold); }
+    .score-card.warning  .prog-fill { background: var(--warning); }
+    .score-card.danger   .prog-fill { background: var(--danger); }
+
+    .score-delta {
+      position: absolute;
+      right: 14px;
+      top: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--green);
+      pointer-events: none;
+      animation: floatUp 0.95s ease forwards;
+    }
+
+    .reset-badge {
+      position: absolute;
+      right: 14px;
+      bottom: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--gold);
+      background: var(--gold-dim);
+      border: 1px solid var(--gold-glow);
+      border-radius: var(--radius-full);
+      padding: 2px 8px;
+      pointer-events: none;
+      animation: floatUp 2s ease forwards;
+    }
+
+    /* ============================================================
+       11. TOGGLE SWITCH (Assaf)
+    ============================================================ */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 13px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin: 14px 0;
+    }
+
+    .toggle-row-label { font-size: 15px; font-weight: 500; }
+    .toggle-row-sub   { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+    .toggle-sw {
+      position: relative;
+      width: 48px;
+      height: 26px;
+      flex-shrink: 0;
+    }
+
+    .toggle-sw input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-track {
+      position: absolute;
+      inset: 0;
+      background: var(--border-2);
+      border-radius: 26px;
+      cursor: pointer;
+      transition: background 0.25s;
+    }
+
+    .toggle-track::before {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      left: 3px;
+      top: 3px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.25s;
+    }
+
+    .toggle-sw input:checked + .toggle-track { background: var(--gold); }
+    .toggle-sw input:checked + .toggle-track::before { transform: translateX(22px); }
+
+    /* ============================================================
+       12. SETTINGS STATUS BADGE (Page 3 header)
+    ============================================================ */
+    .game-badge {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: var(--bg-surface);
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      white-space: nowrap;
+    }
+
+    /* ============================================================
+       13. GAME OVER (Page 4)
+    ============================================================ */
+    .page4-wrap {
+      padding: 40px 20px 48px;
+      text-align: center;
+    }
+
+    .page4-wrap h2 {
+      text-align: center;
+      font-family: 'Cinzel', serif;
+      font-size: 22px;
+      color: var(--text-2);
+      margin: 12px 0 20px;
+      letter-spacing: 1px;
+    }
+
+    .result-card {
+      border-radius: var(--radius);
+      padding: 20px;
+      margin: 10px 0;
+    }
+
+    .result-loser {
+      background: var(--danger-dim);
+      border: 2px solid var(--danger);
+      animation: resultIn 0.45s ease both;
+    }
+
+    .result-winner {
+      background: var(--gold-dim);
+      border: 2px solid var(--gold);
+      box-shadow: var(--shadow-gold);
+      animation: resultIn 0.45s 0.2s ease both;
+    }
+
+    .result-icon  { font-size: 34px; margin-bottom: 6px; display: block; }
+    .result-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      margin-bottom: 6px;
+    }
+
+    .result-loser  .result-label { color: var(--danger); }
+    .result-winner .result-label { color: var(--gold); }
+
+    .result-name {
+      font-family: 'Cinzel', serif;
+      font-size: 26px;
+      font-weight: 700;
+    }
+
+    .result-loser  .result-name { color: var(--danger); }
+    .result-winner .result-name { color: var(--gold); }
+
+    .result-score {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .final-scores {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin: 20px 0;
+      text-align: left;
+    }
+
+    .final-scores h3 {
+      padding: 12px 16px 0;
+    }
+
+    .fs-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 16px;
+      font-size: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .fs-row:last-child { border-bottom: none; }
+
+    .fs-pts {
+      font-family: 'Cinzel', serif;
+      font-size: 16px;
+      color: var(--text-muted);
+    }
+
+    .page4-footer {
+      margin-top: 28px;
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    .page4-footer a {
+      color: var(--green);
+      text-decoration: none;
+    }
+
+    /* ============================================================
+       14. RULES ACCORDION
+    ============================================================ */
+    .rules {
+      margin-top: 22px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .rules summary {
+      padding: 14px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+    }
+
+    .rules summary::-webkit-details-marker { display: none; }
+
+    .rules summary::after {
+      content: '▾';
+      font-size: 14px;
+      transition: transform 0.2s;
+    }
+
+    .rules[open] summary::after { transform: rotate(180deg); }
+
+    .rules-body {
+      padding: 2px 16px 16px;
+      border-top: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    .rules-body p { margin-top: 8px; }
+    .rules-body u { color: var(--green); text-decoration: none; font-weight: 600; }
+
+    /* ============================================================
+       15. TOAST NOTIFICATIONS
+    ============================================================ */
+    #toasts {
+      position: fixed;
+      bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(440px, calc(100vw - 32px));
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 9999;
+      pointer-events: none;
+    }
+
+    .toast {
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 500;
+      pointer-events: auto;
+      animation: toastIn 0.25s ease both;
+      backdrop-filter: blur(8px);
+    }
+
+    .toast.error {
+      background: rgba(224,82,82,0.9);
+      color: white;
+    }
+
+    .toast.success {
+      background: rgba(61,190,110,0.9);
+      color: #0d1f17;
+    }
+
+    .toast.info {
+      background: rgba(28,56,41,0.95);
+      color: var(--text);
+      border: 1px solid var(--border-2);
+    }
+
+    /* ============================================================
+       16. DIVIDER
+    ============================================================ */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 16px 0;
+    }
+
+    /* ============================================================
+       17. ANIMATIONS & KEYFRAMES
+    ============================================================ */
+    @keyframes chipIn {
+      from { opacity: 0; transform: scale(0.65) translateY(6px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    @keyframes floatUp {
+      0%   { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-28px); }
+    }
+
+    @keyframes resultIn {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(10px) scale(0.96); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes toastOut {
+      from { opacity: 1; transform: translateY(0); }
+      to   { opacity: 0; transform: translateY(6px); }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div id="page1">
-            <h1 id="homeButton">
-    <span style="color: red;">❤️</span> YANIV <span style="color: black;">♠️</span>
-</h1>
-            <h2>Spielernamen eintragen (max. 6 Spieler)</h2>
-            <input type="text" id="playerNameInput" placeholder="Spielername">
-            <button id="addPlayerButton">Spieler hinzufügen</button>
-            <ul id="playerList"></ul>
-            <button id="goToPage2Button">Weiter</button>
-            <div class="rules">
-                <h3>Spielregeln</h3>
+<div class="app">
 
-<p><i><u>Punktesystem:</u></i></p>
-    <p>Joker = 0, Ass = 1, 2-K = 2-13</p>
-
-    <p><i><u>Vorbereitung:</u></i></p>
-    <p>1. Die Karten werden gut gemischt.</p>
-    <p>2. Jeder Spieler erhält 5 Karten und das Spiel beginnt mit 0 Punkten.</p>
-
-    <p><i><u>Ablauf:</u></i></p>
-    <p>1. Der jüngste Spieler fängt an.</p>
-    <p>2. Der Spieler legt seine Karten ab (als einzelne, als Paare oder als Straßen gleicher Farben).</p>
-    <p>3. Der Spieler zieht eine Karte vom Stapel oder vom Ablegestapel (die oberste Karte).</p>
-    <p>4. Falls der Spieler die gleiche Karte vom Stapel zieht wie auf dem Ablegestapel, kann er diese direkt legen oder behalten.</p>
-    <p>5. Der nächste Spieler ist an der Reihe.</p>
-    <p>6. Die Runde endet, wenn ein Spieler Yaniv ruft und die Summe seiner Karten ≤ 7 ist.</p>
-    <p>7. Alle anderen Spieler machen noch einen letzten Zug und die Runde ist zu Ende.</p>
-    <p>8. Spieler können durch Assaf Strafpunkte erhalten, wenn ein anderer Spieler weniger oder gleichviel Punkte hat wie der Spieler der Yaniv hat.</p>
-
-    <p><i><u>Ziel des Spiels:</u></i></p>
-    <p>1. Ein Spieler verliert, wenn seine Punktzahl höher als die eingestellten Yaniv-Punkte ist und der Spieler mit den wenigsten Punkten gewinnt.</p>
-
-    <p><i><u>Besondere Regeln:</u></i></p>
-    <p>1. Die Punktzahl eines Spielers wird auf 35 zurückgesetzt, wenn er 75 erreicht hat. (Von 150 auf 75 bei Yaniv 200)</p>
-    <p>2. Bei genau 100 Punkten wird die Punktzahl auf 50 zurückgesetzt. (Von 200 auf 100 bei Yaniv 200)</p>
-    <p>3. Ein Spieler verliert, wenn seine Punktzahl höher als die eingestellten Yaniv-Punkte ist.</p>
-            </div>
-        </div>
-
-        <div id="page2" class="hidden">
-            <h1 id="homeButton">
-    <span style="color: red;">❤️</span> YANIV <span style="color: black;">♠️</span>
-</h1>
-            <h2>Yaniv und Assaf Punkte eintragen</h2>
-            <div class="selection-buttons">
-                <button class="yanivButton" data-points="100">Yaniv 100</button>
-                <button class="yanivButton" data-points="200">Yaniv 200</button>
-            </div>
-            <div class="selection-buttons">
-                <button class="assafButton" data-points="30">Assaf 30</button>
-                <button class="assafButton" data-points="50">Assaf 50</button>
-            </div>
-            <button id="goToPage3Button">Weiter</button>
-        </div>
-
-        <div id="page3" class="hidden">
-            <h1 id="homeButton">
-    <span style="color: red;">❤️</span> YANIV <span style="color: black;">♠️</span>
-</h1>
-            <h2>Punkte eintragen und Assaf auswählen</h2>
-            <div class="player-buttons" id="playerButtons"></div>
-            <input type="number" id="scoreInput" placeholder="Punkte">
-            <input type="checkbox" id="assafCheckbox"> Assaf
-            <button id="addScoreButton">Punkte hinzufügen</button>
-            <ul id="scoreList"></ul>
-        </div>
-
-        <div id="page4" class="hidden">
-    <h1 id="homeButton">
-        <span style="color: red;">❤️</span> YANIV <span style="color: black;">♠️</span>
-    </h1>
-    <h2>Spielergebnis</h2>
-    <p id="result"></p>
-    <button id="newGameButton">Neues Spiel</button>
-    <p style="text-align: center;">
-        <span style="color: red;">❤️</span> Danke für den Support <span style="color: red;">❤️</span>
-    </p>
-    <p style="text-align: center;">
-        <a href="https://github.com/pabloesteves91" target="_blank" style="text-decoration: none; color: #4CAF50;">Meine GitHub-Seite</a>
-    </p>
-</div>
+  <!-- ===================== PAGE 1: Spieler Setup ===================== -->
+  <div class="page active" id="page1">
+    <div class="logo-hero">
+      <span class="logo">
+        <span class="r">♥</span> YANIV <span class="b">♠</span>
+      </span>
+      <p class="subtitle">Punkte App</p>
     </div>
-    <script src="app.js"></script>
+    <div class="page-inner">
+      <h2>Spieler hinzufügen</h2>
+      <div class="input-row">
+        <input type="text" id="playerNameInput" class="input-field"
+               placeholder="Spielername" maxlength="16"
+               autocomplete="off" autocorrect="off" spellcheck="false">
+        <button class="btn-add" id="addPlayerButton" aria-label="Hinzufügen">+</button>
+      </div>
+      <div id="playerError" class="v-error"></div>
+      <div id="playerChips" class="chips"></div>
+
+      <button class="btn-primary" id="goToPage2Button">Weiter →</button>
+
+      <details class="rules">
+        <summary>Spielregeln</summary>
+        <div class="rules-body">
+          <p><u>Punktesystem</u></p>
+          <p>Joker = 0 · Ass = 1 · 2–K = 2–13</p>
+
+          <p><u>Vorbereitung</u></p>
+          <p>Karten mischen · Jeder erhält 5 Karten · Startwert: 0 Punkte</p>
+
+          <p><u>Ablauf</u></p>
+          <p>1. Der jüngste Spieler beginnt.</p>
+          <p>2. Karte ablegen (einzeln, Paare oder gleichfarbige Straßen), dann eine Karte ziehen.</p>
+          <p>3. Die Runde endet, wenn ein Spieler „Yaniv!" ruft (Handwert ≤ 7).</p>
+          <p>4. Alle anderen machen noch einen letzten Zug.</p>
+          <p>5. Assaf: Hat ein anderer Spieler ≤ Punkte wie der Yaniv-Rufer, erhält dieser Strafpunkte.</p>
+
+          <p><u>Besondere Regeln</u></p>
+          <p>Genau 75 Punkte → Reset auf 35 (bei Yaniv 200: 150 → 75).</p>
+          <p>Genau 100 Punkte → Reset auf 50 (bei Yaniv 200: 200 → 100).</p>
+
+          <p><u>Spielende</u></p>
+          <p>Ein Spieler verliert, wenn seine Punktzahl die Yaniv-Grenze überschreitet. Gewinner ist der Spieler mit den wenigsten Punkten.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- ===================== PAGE 2: Einstellungen ===================== -->
+  <div class="page" id="page2">
+    <div class="page-header">
+      <button class="btn-back" id="backBtn2" aria-label="Zurück">‹</button>
+      <div class="logo" id="homeBtn2" style="cursor:pointer">
+        <span class="r">♥</span> YANIV <span class="b">♠</span>
+      </div>
+      <div style="width:32px"></div>
+    </div>
+    <div class="page-inner">
+      <h2>Spieleinstellungen</h2>
+
+      <h3>Yaniv-Punkte</h3>
+      <div class="option-grid">
+        <button class="btn-option yaniv-btn" data-points="100">100<span class="check">✓</span></button>
+        <button class="btn-option yaniv-btn" data-points="200">200<span class="check">✓</span></button>
+      </div>
+
+      <h3>Assaf-Punkte</h3>
+      <div class="option-grid">
+        <button class="btn-option assaf-btn" data-points="30">30<span class="check">✓</span></button>
+        <button class="btn-option assaf-btn" data-points="50">50<span class="check">✓</span></button>
+      </div>
+
+      <p id="settingsStatus" class="settings-status"></p>
+      <button class="btn-primary" id="goToPage3Button" disabled>Spiel starten →</button>
+    </div>
+  </div>
+
+  <!-- ===================== PAGE 3: Punkte eintragen ===================== -->
+  <div class="page" id="page3">
+    <div class="page-header">
+      <div class="logo" id="homeBtn3" style="cursor:pointer">
+        <span class="r">♥</span> YANIV <span class="b">♠</span>
+      </div>
+      <span class="game-badge" id="gameBadge">—</span>
+    </div>
+    <div class="page-inner">
+      <h3>Bestenliste</h3>
+      <div id="scoreList" class="score-list"></div>
+
+      <div class="divider"></div>
+
+      <h3>Spieler auswählen</h3>
+      <div id="playerButtons" class="chips scrollable"></div>
+      <div id="playerSelectError" class="v-error"></div>
+
+      <h3 style="margin-top:16px">Punkte eingeben</h3>
+      <div class="score-stepper">
+        <button class="btn-step" id="scoreMinus" aria-label="Minus">−</button>
+        <input type="number" id="scoreInput" class="input-field"
+               placeholder="0" min="0" inputmode="numeric">
+        <button class="btn-step" id="scorePlus" aria-label="Plus">+</button>
+      </div>
+      <div id="scoreError" class="v-error"></div>
+
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-row-label">Assaf</div>
+          <div class="toggle-row-sub">+<span id="assafLabel">?</span> Strafpunkte</div>
+        </div>
+        <label class="toggle-sw" aria-label="Assaf aktivieren">
+          <input type="checkbox" id="assafCheckbox">
+          <span class="toggle-track"></span>
+        </label>
+      </div>
+
+      <button class="btn-primary" id="addScoreButton">Punkte hinzufügen</button>
+    </div>
+  </div>
+
+  <!-- ===================== PAGE 4: Spielergebnis ===================== -->
+  <div class="page" id="page4">
+    <div class="page4-wrap">
+      <div class="logo" style="font-size:26px;letter-spacing:4px;text-align:center;display:block">
+        <span class="r">♥</span> YANIV <span class="b">♠</span>
+      </div>
+      <h2>Spiel beendet!</h2>
+
+      <div id="loserCard"  class="result-card result-loser"></div>
+      <div id="winnerCard" class="result-card result-winner"></div>
+
+      <div id="finalScores" class="final-scores"></div>
+
+      <button class="btn-primary" id="newGameButton" style="margin-top:24px">Neues Spiel</button>
+
+      <div class="page4-footer">
+        <span class="r">♥</span> Danke für den Support <span class="r">♥</span><br>
+        <a href="https://github.com/pabloesteves91" target="_blank" rel="noopener">pabloesteves91 auf GitHub</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Toast container -->
+<div id="toasts"></div>
+
+<script src="app.js"></script>
 </body>
 </html>
