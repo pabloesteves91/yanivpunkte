@@ -85,8 +85,8 @@ function addPlayer() {
   playerNames.push(name);
   playerScores[name] = 0;
   input.value = '';
-  input.focus();
   renderPlayerChips();
+  showToast('✓ ' + name + ' hinzugefügt', 'success');
 }
 
 function removePlayer(name) {
@@ -156,23 +156,19 @@ function setAssafPoints(points, btn) {
 
 function updateSettingsStatus() {
   const status = document.getElementById('settingsStatus');
-  const goBtn  = document.getElementById('goToPage3Button');
 
   if (yanivPoints && assafPoints) {
-    status.textContent   = `Yaniv ${yanivPoints} · Assaf ${assafPoints} — bereit ✓`;
-    status.style.color   = 'var(--green)';
-    goBtn.disabled       = false;
+    status.textContent = `Yaniv ${yanivPoints} · Assaf ${assafPoints} — bereit ✓`;
+    status.style.color = 'var(--green)';
   } else if (yanivPoints) {
     status.textContent = `Yaniv ${yanivPoints} gewählt — bitte Assaf-Punkte wählen`;
     status.style.color = '';
-    goBtn.disabled = true;
   } else if (assafPoints) {
     status.textContent = `Assaf ${assafPoints} gewählt — bitte Yaniv-Punkte wählen`;
     status.style.color = '';
-    goBtn.disabled = true;
   } else {
-    status.textContent = '';
-    goBtn.disabled = true;
+    status.textContent = 'Bitte Yaniv- und Assaf-Punkte wählen';
+    status.style.color = '';
   }
 }
 
@@ -180,6 +176,10 @@ function updateSettingsStatus() {
 //  Page 3 — Score Tracking
 // ============================================================
 function goToPage3() {
+  if (!yanivPoints || !assafPoints) {
+    showToast('Bitte zuerst Yaniv- und Assaf-Punkte auswählen.', 'error');
+    return;
+  }
   renderScoreCards();
   renderPlayerButtons();
   updateGameBadge();
@@ -398,8 +398,7 @@ function startNewGame() {
   document.getElementById('playerNameInput').value  = '';
   document.getElementById('scoreInput').value       = '';
   document.getElementById('assafCheckbox').checked  = false;
-  document.getElementById('settingsStatus').textContent = '';
-  document.getElementById('goToPage3Button').disabled  = true;
+  document.getElementById('settingsStatus').textContent = 'Bitte Yaniv- und Assaf-Punkte wählen';
   document.querySelectorAll('.yaniv-btn, .assaf-btn')
     .forEach(b => b.classList.remove('selected'));
 
